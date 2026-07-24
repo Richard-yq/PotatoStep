@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/Swift-5.9-orange?style=for-the-badge&logo=swift" alt="Swift 5.9" />
   <img src="https://img.shields.io/badge/SwiftUI-Framework-red?style=for-the-badge&logo=swift" alt="SwiftUI" />
   <img src="https://img.shields.io/badge/HealthKit-Supported-brightgreen?style=for-the-badge&logo=apple" alt="HealthKit" />
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License MIT" />
+  <img src="https://img.shields.io/badge/Copyright-%C2%A9%202026%20Richard--yq-blue?style=for-the-badge" alt="Copyright © 2026 Richard-yq" />
 </p>
 
 ---
@@ -128,6 +128,7 @@ open PotatoStep.xcodeproj
 
 ---
 
-## 📄 授權條款 (License)
+## 📄 版權聲明 (Copyright & License)
 
-本專案採用 **MIT License** 授權。詳細資訊請參閱 LICENSE 檔案。
+Copyright © 2026 **[Richard-yq](https://github.com/Richard-yq)**. All rights reserved. 版權所有。
+
