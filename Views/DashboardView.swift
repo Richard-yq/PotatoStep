@@ -9,6 +9,19 @@ public struct DashboardView: View {
         self._showAddModal = showAddModal
     }
     
+    @ViewBuilder
+    private var logoImage: some View {
+        #if SWIFT_PACKAGE
+        Image("AppLogo", bundle: .module)
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+        #else
+        Image("AppLogo")
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+        #endif
+    }
+    
     public var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 24) {
@@ -84,14 +97,7 @@ public struct DashboardView: View {
                     VStack(spacing: 24) {
                         // 標題與重新整理
                         HStack(alignment: .center) {
-                            #if SWIFT_PACKAGE
-                            Image("AppLogo", bundle: .module)
-                                .resizable()
-                            #else
-                            Image("AppLogo")
-                                .resizable()
-                            #endif
-                                .aspectRatio(contentMode: .fill)
+                            logoImage
                                 .frame(width: 46, height: 46)
                                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                                 .overlay(
