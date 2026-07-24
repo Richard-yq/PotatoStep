@@ -26,49 +26,7 @@ public struct DashboardView: View {
     public var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 24) {
-                // 1. HealthKit 權限玻璃警示條
-                if !viewModel.isAuthorized {
-                    Button(action: {
-                        viewModel.requestAuthorization()
-                    }) {
-                        HStack(spacing: 14) {
-                            ZStack {
-                                Circle()
-                                    .fill(LinearGradient(colors: [.red, .orange], startPoint: .topLeading, endPoint: .bottomTrailing))
-                                    .frame(width: 44, height: 44)
-                                Image(systemName: "heart.fill")
-                                    .font(.title3)
-                                    .foregroundColor(.white)
-                            }
-                            
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text("連結 Apple Health (健康)")
-                                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                                    .foregroundColor(.primary)
-                                Text("點擊授權讀取與同步步數權限")
-                                    .font(.system(size: 13, weight: .medium, design: .rounded))
-                                    .foregroundColor(.secondary)
-                            }
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(14)
-                        .background(
-                            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                #if canImport(UIKit)
-                                .fill(Color(uiColor: .secondarySystemGroupedBackground))
-                                #else
-                                .fill(Color.gray.opacity(0.12))
-                                #endif
-                                .shadow(color: Color.black.opacity(0.06), radius: 10, x: 0, y: 4)
-                        )
-                    }
-                    .padding(.horizontal)
-                }
-                
-                // 2. iOS 18 風格霓虹擬真主儀表板 (Neon Fitness Ring Card)
+                // 1. iOS 18 風格霓虹擬真主儀表板 (Neon Fitness Ring Card)
                 ZStack {
                     // 背景動態網格漸層
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
@@ -229,7 +187,7 @@ public struct DashboardView: View {
                 }
                 .padding(.horizontal)
                 
-                // 3. 快速同步區塊 (Quick Sync Pills)
+                // 2. 快速同步區塊 (Quick Sync Pills)
                 VStack(alignment: .leading, spacing: 14) {
                     HStack {
                         Text("極速寫入步數")
@@ -261,7 +219,7 @@ public struct DashboardView: View {
                     }
                 }
                 
-                // 4. 自訂時段與分攤按鈕
+                // 3. 自訂時段與分攤按鈕
                 Button(action: {
                     showAddModal = true
                 }) {
@@ -298,6 +256,48 @@ public struct DashboardView: View {
                     .shadow(color: Color.blue.opacity(0.35), radius: 12, x: 0, y: 6)
                 }
                 .padding(.horizontal)
+                
+                // 4. HealthKit 權限玻璃警示條 (移至頁面最下方)
+                if !viewModel.isAuthorized {
+                    Button(action: {
+                        viewModel.requestAuthorization()
+                    }) {
+                        HStack(spacing: 14) {
+                            ZStack {
+                                Circle()
+                                    .fill(LinearGradient(colors: [.red, .orange], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .frame(width: 44, height: 44)
+                                Image(systemName: "heart.fill")
+                                    .font(.title3)
+                                    .foregroundColor(.white)
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text("連結 Apple Health (健康)")
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                                    .foregroundColor(.primary)
+                                Text("點擊授權讀取與同步步數權限")
+                                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(14)
+                        .background(
+                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                #if canImport(UIKit)
+                                .fill(Color(uiColor: .secondarySystemGroupedBackground))
+                                #else
+                                .fill(Color.gray.opacity(0.12))
+                                #endif
+                                .shadow(color: Color.black.opacity(0.06), radius: 10, x: 0, y: 4)
+                        )
+                    }
+                    .padding(.horizontal)
+                }
             }
             .padding(.vertical)
         }
