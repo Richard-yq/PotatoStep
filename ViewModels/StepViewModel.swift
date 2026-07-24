@@ -10,6 +10,10 @@ public class StepViewModel: ObservableObject {
     @Published public var alertMessage: String? = nil
     @Published public var showAlert: Bool = false
     
+    // 馬鈴薯跑步動畫與浮動特效狀態
+    @Published public var isPotatoRunning: Bool = false
+    @Published public var lastAddedSteps: Int = 0
+    
     @Published public var historyLogs: [StepRecord] = []
     
     private let healthKitManager = HealthKitManager.shared
@@ -89,8 +93,8 @@ public class StepViewModel: ObservableObject {
                     self?.saveHistoryToStorage()
                     self?.refreshTodaySteps()
                     
-                    self?.alertMessage = "成功寫入 \(count.formatted()) 步至 Apple Health！"
-                    self?.showAlert = true
+                    // 觸發馬鈴薯跑步動畫與粒子特效
+                    self?.triggerPotatoRunningAnimation(steps: count)
                 } else {
                     self?.alertMessage = "寫入失敗：\(error?.localizedDescription ?? "未知錯誤")。請確認 HealthKit 寫入權限是否已開啟。"
                     self?.showAlert = true
@@ -102,6 +106,21 @@ public class StepViewModel: ObservableObject {
             healthKitManager.writeStepsDistributed(totalCount: Double(count), startDate: startDate, endDate: endDate, intervalsCount: 6, completion: completionHandler)
         } else {
             healthKitManager.writeSteps(count: Double(count), startDate: startDate, endDate: endDate, completion: completionHandler)
+        }
+    }
+    
+    /// 觸發馬鈴薯跑步特效
+    private func triggerPotatoRunningAnimation(steps: Int) {
+        self.lastAddedSteps = steps
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+            self.isPotatoRunning = true
+        }
+        
+        // 1.8 秒後自動結束跑步動畫
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) { [weak self] in
+            withAnimation(.easeInOut(duration: 0.5)) {
+                self?.isPotatoRunning = false
+            }
         }
     }
     

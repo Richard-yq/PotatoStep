@@ -5,6 +5,11 @@ public struct DashboardView: View {
     @Binding var showAddModal: Bool
     @State private var showResetConfirm: Bool = false
     
+    // 馬鈴薯跑步動畫控制
+    @State private var runWobble: Bool = false
+    @State private var rippleScale: CGFloat = 1.0
+    @State private var rippleOpacity: Double = 0.0
+    
     public init(viewModel: StepViewModel, showAddModal: Binding<Bool>) {
         self.viewModel = viewModel
         self._showAddModal = showAddModal
@@ -44,32 +49,57 @@ public struct DashboardView: View {
                             RoundedRectangle(cornerRadius: 28, style: .continuous)
                                 .stroke(
                                     LinearGradient(
-                                        colors: [.white.opacity(0.2), .clear, .white.opacity(0.05)],
+                                        colors: viewModel.isPotatoRunning ? [.cyan, .purple, .pink] : [.white.opacity(0.2), .clear, .white.opacity(0.05)],
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     ),
-                                    lineWidth: 1.5
+                                    lineWidth: viewModel.isPotatoRunning ? 2.5 : 1.5
                                 )
                         )
-                        .shadow(color: Color(red: 0.1, green: 0.4, blue: 0.9).opacity(0.25), radius: 20, x: 0, y: 10)
+                        .shadow(color: viewModel.isPotatoRunning ? Color.cyan.opacity(0.5) : Color(red: 0.1, green: 0.4, blue: 0.9).opacity(0.25), radius: viewModel.isPotatoRunning ? 24 : 20, x: 0, y: 10)
                     
                     VStack(spacing: 24) {
-                        // 標題與重新整理/重置
+                        // 標題與馬鈴薯跑步 Avatar / 重新整理/重置
                         HStack(alignment: .center) {
-                            logoImage
-                                .frame(width: 46, height: 46)
-                                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                                )
-                                .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                            ZStack(alignment: .bottomTrailing) {
+                                logoImage
+                                    .frame(width: 48, height: 48)
+                                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                            .stroke(viewModel.isPotatoRunning ? Color.cyan : Color.white.opacity(0.3), lineWidth: viewModel.isPotatoRunning ? 2 : 1)
+                                    )
+                                    .rotationEffect(.degrees(viewModel.isPotatoRunning ? (runWobble ? 14 : -14) : 0))
+                                    .offset(y: viewModel.isPotatoRunning ? (runWobble ? -4 : 4) : 0)
+                                    .shadow(color: viewModel.isPotatoRunning ? Color.cyan.opacity(0.6) : Color.black.opacity(0.2), radius: 6, x: 0, y: 3)
+                                
+                                // 跑步煙塵/汗水小圖標
+                                if viewModel.isPotatoRunning {
+                                    Text("💨")
+                                        .font(.system(size: 14))
+                                        .offset(x: 10, y: 4)
+                                        .transition(.scale.combined(with: .opacity))
+                                }
+                            }
                             
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("TODAY'S STEPS")
-                                    .font(.system(size: 12, weight: .black, design: .rounded))
-                                    .foregroundColor(Color(red: 0.0, green: 0.85, blue: 1.0)) // 青綠霓虹
-                                    .tracking(1.5)
+                                HStack(spacing: 6) {
+                                    Text("TODAY'S STEPS")
+                                        .font(.system(size: 12, weight: .black, design: .rounded))
+                                        .foregroundColor(Color(red: 0.0, green: 0.85, blue: 1.0)) // 青綠霓虹
+                                        .tracking(1.5)
+                                    
+                                    if viewModel.isPotatoRunning {
+                                        Text("🏃 奔跑中!")
+                                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal, 6)
+                                            .padding(.vertical, 2)
+                                            .background(Color.cyan)
+                                            .cornerRadius(8)
+                                            .transition(.scale)
+                                    }
+                                }
                                 
                                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                                     Text("\(viewModel.todaySteps.formatted())")
@@ -118,8 +148,14 @@ public struct DashboardView: View {
                             }
                         }
                         
-                        // 霓虹進度環 (Electric Cyan-Purple Ring)
+                        // 霓虹進度環 (Electric Cyan-Purple Ring + 馬鈴薯跑步特效)
                         ZStack {
+                            // 衝刺時的擴散漣漪圈
+                            Circle()
+                                .stroke(Color.cyan.opacity(rippleOpacity), lineWidth: 3)
+                                .scaleEffect(rippleScale)
+                                .frame(width: 180, height: 180)
+                            
                             Circle()
                                 .stroke(Color.white.opacity(0.08), lineWidth: 20)
                                 .frame(width: 180, height: 180)
@@ -142,10 +178,25 @@ public struct DashboardView: View {
                                 )
                                 .rotationEffect(.degrees(-90))
                                 .frame(width: 180, height: 180)
-                                .shadow(color: Color(red: 0.0, green: 0.95, blue: 0.8).opacity(0.5), radius: 12, x: 0, y: 0)
+                                .shadow(color: viewModel.isPotatoRunning ? Color.cyan : Color(red: 0.0, green: 0.95, blue: 0.8).opacity(0.5), radius: viewModel.isPotatoRunning ? 20 : 12, x: 0, y: 0)
                                 .animation(.spring(response: 0.8, dampingFraction: 0.7), value: viewModel.progressRatio)
                             
-                            VStack(spacing: 2) {
+                            // 中心數字與跑步氣泡 Toast
+                            VStack(spacing: 4) {
+                                if viewModel.isPotatoRunning {
+                                    HStack(spacing: 4) {
+                                        Text("🥔💨")
+                                        Text("+\(viewModel.lastAddedSteps.formatted()) 步")
+                                            .font(.system(size: 14, weight: .black, design: .rounded))
+                                            .foregroundColor(.cyan)
+                                    }
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(Color.black.opacity(0.6))
+                                    .cornerRadius(12)
+                                    .transition(.scale.combined(with: .opacity))
+                                }
+                                
                                 Text("\(Int(viewModel.progressRatio * 100))%")
                                     .font(.system(size: 34, weight: .black, design: .rounded))
                                     .foregroundColor(.white)
@@ -300,6 +351,25 @@ public struct DashboardView: View {
                 }
             }
             .padding(.vertical)
+        }
+        .onChange(of: viewModel.isPotatoRunning) { isRunning in
+            if isRunning {
+                // 觸發馬鈴薯跑步搖擺與環形漣漪動畫
+                withAnimation(Animation.easeInOut(duration: 0.15).repeatForever(autoreverses: true)) {
+                    runWobble = true
+                }
+                
+                rippleScale = 1.0
+                rippleOpacity = 0.8
+                withAnimation(Animation.easeOut(duration: 1.2).repeatForever(autoreverses: false)) {
+                    rippleScale = 1.35
+                    rippleOpacity = 0.0
+                }
+            } else {
+                runWobble = false
+                rippleScale = 1.0
+                rippleOpacity = 0.0
+            }
         }
         .confirmationDialog("重置今日步數", isPresented: $showResetConfirm, titleVisibility: .visible) {
             Button("確定清除今日新增步數", role: .destructive) {
