@@ -84,8 +84,13 @@ public struct DashboardView: View {
                     VStack(spacing: 24) {
                         // 標題與重新整理
                         HStack(alignment: .center) {
+                            #if SWIFT_PACKAGE
                             Image("AppLogo", bundle: .module)
                                 .resizable()
+                            #else
+                            Image("AppLogo")
+                                .resizable()
+                            #endif
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 46, height: 46)
                                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
