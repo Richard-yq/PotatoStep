@@ -18,5 +18,7 @@
 	<string>PotatoStep 需要讀取您的 HealthKit 每日步數資料，以計算目標完成度與熱量消耗。</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>PotatoStep 需要將您同步的步數資料寫入至 Apple Health（健康）。</string>
+	<key>UILaunchScreen</key>
+	<dict/>
 </dict>
 </plist>
