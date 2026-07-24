@@ -83,8 +83,19 @@ public struct DashboardView: View {
                     
                     VStack(spacing: 24) {
                         // 標題與重新整理
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
+                        HStack(alignment: .center) {
+                            Image("AppLogo", bundle: .module)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 46, height: 46)
+                                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                                )
+                                .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                            
+                            VStack(alignment: .leading, spacing: 2) {
                                 Text("TODAY'S STEPS")
                                     .font(.system(size: 12, weight: .black, design: .rounded))
                                     .foregroundColor(Color(red: 0.0, green: 0.85, blue: 1.0)) // 青綠霓虹
@@ -92,10 +103,10 @@ public struct DashboardView: View {
                                 
                                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                                     Text("\(viewModel.todaySteps.formatted())")
-                                        .font(.system(size: 46, weight: .heavy, design: .rounded))
+                                        .font(.system(size: 44, weight: .heavy, design: .rounded))
                                         .foregroundColor(.white)
                                     Text("步")
-                                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                                        .font(.system(size: 16, weight: .bold, design: .rounded))
                                         .foregroundColor(.white.opacity(0.7))
                                 }
                             }

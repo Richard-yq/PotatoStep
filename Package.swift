@@ -16,13 +16,16 @@ let package = Package(
         .target(
             name: "PotatoStep",
             path: ".",
-            exclude: ["Info.plist", "README.md"],
+            exclude: ["Info.plist", "README.md", "assert"],
             sources: [
                 "StepTrackerApp.swift",
                 "Models",
                 "Services",
                 "ViewModels",
                 "Views"
+            ],
+            resources: [
+                .process("Assets.xcassets")
             ]
         )
     ]
