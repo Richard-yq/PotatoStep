@@ -84,28 +84,42 @@ public class StepViewModel: ObservableObject {
         guard count > 0 else { return }
         isSyncing = true
         
-        let completionHandler: (Bool, Error?) -> Void = { [weak self] success, error in
-            DispatchQueue.main.async {
-                self?.isSyncing = false
-                if success {
-                    let record = StepRecord(count: count, startDate: startDate, endDate: endDate, isManualSync: true)
-                    self?.historyLogs.insert(record, at: 0)
-                    self?.saveHistoryToStorage()
-                    self?.refreshTodaySteps()
-                    
-                    // 觸發馬鈴薯跑步動畫與粒子特效
-                    self?.triggerPotatoRunningAnimation(steps: count)
-                } else {
-                    self?.alertMessage = "寫入失敗：\(error?.localizedDescription ?? "未知錯誤")。請確認 HealthKit 寫入權限是否已開啟。"
-                    self?.showAlert = true
+        let performWrite = { [weak self] in
+            let completionHandler: (Bool, Error?) -> Void = { [weak self] success, error in
+                DispatchQueue.main.async {
+                    self?.isSyncing = false
+                    if success {
+                        let record = StepRecord(count: count, startDate: startDate, endDate: endDate, isManualSync: true)
+                        self?.historyLogs.insert(record, at: 0)
+                        self?.saveHistoryToStorage()
+                        self?.refreshTodaySteps()
+                        
+                        // 觸發馬鈴薯跑步動畫與粒子特效
+                        self?.triggerPotatoRunningAnimation(steps: count)
+                    } else {
+                        let errDetails = error?.localizedDescription ?? "權限未開啟或時間戳記無效"
+                        self?.alertMessage = "寫入失敗：\(errDetails)。請至 iPhone「設定」➔「健康」確認 PotatoStep 寫入步數權限為開啟狀態。"
+                        self?.showAlert = true
+                    }
                 }
+            }
+            
+            if isDistributed {
+                self?.healthKitManager.writeStepsDistributed(totalCount: Double(count), startDate: startDate, endDate: endDate, intervalsCount: 6, completion: completionHandler)
+            } else {
+                self?.healthKitManager.writeSteps(count: Double(count), startDate: startDate, endDate: endDate, completion: completionHandler)
             }
         }
         
-        if isDistributed {
-            healthKitManager.writeStepsDistributed(totalCount: Double(count), startDate: startDate, endDate: endDate, intervalsCount: 6, completion: completionHandler)
+        if !healthKitManager.isAuthorized {
+            healthKitManager.requestAuthorization { [weak self] success, _ in
+                DispatchQueue.main.async {
+                    self?.isAuthorized = success
+                    performWrite()
+                }
+            }
         } else {
-            healthKitManager.writeSteps(count: Double(count), startDate: startDate, endDate: endDate, completion: completionHandler)
+            performWrite()
         }
     }
     

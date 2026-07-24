@@ -15,6 +15,13 @@ public class HealthKitManager: ObservableObject {
         return HKHealthStore.isHealthDataAvailable()
     }
     
+    /// 檢查步數寫入權限狀態
+    public var isWriteAuthorized: Bool {
+        guard let stepType = HKQuantityType.quantityType(forIdentifier: .stepCount) else { return false }
+        let status = healthStore.authorizationStatus(for: stepType)
+        return status == .sharingAuthorized
+    }
+    
     /// 請求 HealthKit 步數的讀取與寫入權限
     public func requestAuthorization(completion: @escaping (Bool, Error?) -> Void) {
         guard isHealthKitAvailable else {
@@ -78,8 +85,16 @@ public class HealthKitManager: ObservableObject {
             return
         }
         
+        // 嚴格校正時間戳記：結束時間不得超過現在時間，開始時間必須小於結束時間
+        let now = Date()
+        let validEnd = min(endDate, now)
+        var validStart = min(startDate, validEnd)
+        if validStart >= validEnd {
+            validStart = validEnd.addingTimeInterval(-60)
+        }
+        
         let quantity = HKQuantity(unit: HKUnit.count(), doubleValue: count)
-        let sample = HKQuantitySample(type: stepType, quantity: quantity, start: startDate, end: endDate)
+        let sample = HKQuantitySample(type: stepType, quantity: quantity, start: validStart, end: validEnd)
         
         healthStore.save(sample) { success, error in
             completion(success, error)
@@ -93,9 +108,17 @@ public class HealthKitManager: ObservableObject {
             return
         }
         
-        let totalDuration = endDate.timeIntervalSince(startDate)
+        // 嚴格校正時間戳記
+        let now = Date()
+        let validEnd = min(endDate, now)
+        var validStart = min(startDate, validEnd)
+        if validStart >= validEnd {
+            validStart = validEnd.addingTimeInterval(-60)
+        }
+        
+        let totalDuration = validEnd.timeIntervalSince(validStart)
         guard totalDuration > 0, intervalsCount > 0 else {
-            writeSteps(count: totalCount, startDate: startDate, endDate: endDate, completion: completion)
+            writeSteps(count: totalCount, startDate: validStart, endDate: validEnd, completion: completion)
             return
         }
         
@@ -103,10 +126,10 @@ public class HealthKitManager: ObservableObject {
         let baseStepsPerInterval = totalCount / Double(intervalsCount)
         
         var samples: [HKQuantitySample] = []
-        var currentStart = startDate
+        var currentStart = validStart
         
         for i in 0..<intervalsCount {
-            let currentEnd = (i == intervalsCount - 1) ? endDate : currentStart.addingTimeInterval(intervalDuration)
+            let currentEnd = (i == intervalsCount - 1) ? validEnd : currentStart.addingTimeInterval(intervalDuration)
             
             // 增加微小微調隨機波動（約 ±10%），讓趨勢圖更自然真實
             let variation = Double.random(in: 0.9...1.1)
