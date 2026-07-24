@@ -1,6 +1,9 @@
 import Foundation
 import Combine
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
 public class StepViewModel: ObservableObject {
     @Published public var todaySteps: Int = 0
@@ -19,10 +22,12 @@ public class StepViewModel: ObservableObject {
     private let healthKitManager = HealthKitManager.shared
     private var cancellables = Set<AnyCancellable>()
     private let historyStorageKey = "StepApp_HistoryLogs"
+    private let maxHistoryLogsCount = 200
     
     public init() {
         loadHistoryFromStorage()
         checkAuthorizationAndRefresh()
+        setupForegroundNotificationObserver()
     }
     
     public var progressRatio: Double {
@@ -38,6 +43,17 @@ public class StepViewModel: ObservableObject {
     public var estimatedCalories: Double {
         // 平均 1 步約 0.04 大卡
         return Double(todaySteps) * 0.04
+    }
+    
+    /// 監聽 App 回到前景事件，自動刷新 Apple Health 數據
+    private func setupForegroundNotificationObserver() {
+        #if canImport(UIKit)
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+            .sink { [weak self] _ in
+                self?.refreshTodaySteps()
+            }
+            .store(in: &cancellables)
+        #endif
     }
     
     public func requestAuthorization() {
@@ -59,7 +75,9 @@ public class StepViewModel: ObservableObject {
     }
     
     public func refreshTodaySteps() {
-        isSyncing = true
+        DispatchQueue.main.async {
+            self.isSyncing = true
+        }
         healthKitManager.fetchTodayStepCount { [weak self] steps, error in
             DispatchQueue.main.async {
                 self?.isSyncing = false
@@ -82,20 +100,26 @@ public class StepViewModel: ObservableObject {
     /// 寫入步數至 Apple Health 並更新紀錄
     public func addStepsWithDetails(count: Int, startDate: Date, endDate: Date, isDistributed: Bool) {
         guard count > 0 else { return }
-        isSyncing = true
+        
+        // 限制單次寫入最大值，避免誤填極端數據 (如超過 200,000 步)
+        let validCount = min(count, 200000)
+        
+        DispatchQueue.main.async {
+            self.isSyncing = true
+        }
         
         let performWrite = { [weak self] in
             let completionHandler: (Bool, Error?) -> Void = { [weak self] success, error in
                 DispatchQueue.main.async {
                     self?.isSyncing = false
                     if success {
-                        let record = StepRecord(count: count, startDate: startDate, endDate: endDate, isManualSync: true)
+                        let record = StepRecord(count: validCount, startDate: startDate, endDate: endDate, isManualSync: true)
                         self?.historyLogs.insert(record, at: 0)
-                        self?.saveHistoryToStorage()
+                        self?.trimAndSaveHistoryStorage()
                         self?.refreshTodaySteps()
                         
                         // 觸發馬鈴薯跑步動畫與粒子特效
-                        self?.triggerPotatoRunningAnimation(steps: count)
+                        self?.triggerPotatoRunningAnimation(steps: validCount)
                     } else {
                         let errDetails = error?.localizedDescription ?? "權限未開啟或時間戳記無效"
                         self?.alertMessage = "寫入失敗：\(errDetails)。請至 iPhone「設定」➔「健康」確認 PotatoStep 寫入步數權限為開啟狀態。"
@@ -105,9 +129,9 @@ public class StepViewModel: ObservableObject {
             }
             
             if isDistributed {
-                self?.healthKitManager.writeStepsDistributed(totalCount: Double(count), startDate: startDate, endDate: endDate, intervalsCount: 6, completion: completionHandler)
+                self?.healthKitManager.writeStepsDistributed(totalCount: Double(validCount), startDate: startDate, endDate: endDate, intervalsCount: 6, completion: completionHandler)
             } else {
-                self?.healthKitManager.writeSteps(count: Double(count), startDate: startDate, endDate: endDate, completion: completionHandler)
+                self?.healthKitManager.writeSteps(count: Double(validCount), startDate: startDate, endDate: endDate, completion: completionHandler)
             }
         }
         
@@ -140,14 +164,16 @@ public class StepViewModel: ObservableObject {
     
     /// 清除與重置今日寫入的所有步數
     public func resetTodaySteps() {
-        isSyncing = true
+        DispatchQueue.main.async {
+            self.isSyncing = true
+        }
         healthKitManager.deleteTodaySteps { [weak self] success, error in
             DispatchQueue.main.async {
                 self?.isSyncing = false
                 if success {
                     let startOfDay = Calendar.current.startOfDay(for: Date())
                     self?.historyLogs.removeAll { $0.startDate >= startOfDay }
-                    self?.saveHistoryToStorage()
+                    self?.trimAndSaveHistoryStorage()
                     self?.refreshTodaySteps()
                     
                     self?.alertMessage = "已成功清空與重置今日新增的步數！"
@@ -174,10 +200,13 @@ public class StepViewModel: ObservableObject {
             }
         }
         historyLogs.remove(atOffsets: offsets)
-        saveHistoryToStorage()
+        trimAndSaveHistoryStorage()
     }
     
-    private func saveHistoryToStorage() {
+    private func trimAndSaveHistoryStorage() {
+        if historyLogs.count > maxHistoryLogsCount {
+            historyLogs = Array(historyLogs.prefix(maxHistoryLogsCount))
+        }
         if let encoded = try? JSONEncoder().encode(historyLogs) {
             UserDefaults.standard.set(encoded, forKey: historyStorageKey)
         }
@@ -186,7 +215,7 @@ public class StepViewModel: ObservableObject {
     private func loadHistoryFromStorage() {
         if let data = UserDefaults.standard.data(forKey: historyStorageKey),
            let decoded = try? JSONDecoder().decode([StepRecord].self, from: data) {
-            self.historyLogs = decoded
+            self.historyLogs = Array(decoded.prefix(maxHistoryLogsCount))
         }
     }
 }

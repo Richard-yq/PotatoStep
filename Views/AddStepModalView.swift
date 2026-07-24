@@ -13,6 +13,11 @@ public struct AddStepModalView: View {
         self.viewModel = viewModel
     }
     
+    private var parsedStepCount: Int {
+        let clean = stepText.filter { $0.isNumber }
+        return Int(clean) ?? 0
+    }
+    
     public var body: some View {
         NavigationView {
             Form {
@@ -29,6 +34,12 @@ public struct AddStepModalView: View {
                         #else
                         textfield
                         #endif
+                    }
+                    
+                    if parsedStepCount > 200000 {
+                        Text("⚠️ 單次寫入上限為 200,000 步")
+                            .font(.system(size: 12, weight: .semibold, design: .rounded))
+                            .foregroundColor(.orange)
                     }
                     
                     HStack(spacing: 8) {
@@ -49,8 +60,19 @@ public struct AddStepModalView: View {
                 Section(header: Text("時間區間 (Apple Health)").font(.system(.subheadline, design: .rounded)).fontWeight(.bold)) {
                     DatePicker("開始時間", selection: $startDate, in: ...endDate)
                         .font(.system(.body, design: .rounded))
-                    DatePicker("結束時間", selection: $endDate, in: startDate...)
+                        .onChange(of: startDate) { newStart in
+                            if newStart >= endDate {
+                                endDate = newStart.addingTimeInterval(600)
+                            }
+                        }
+                    
+                    DatePicker("結束時間", selection: $endDate, in: startDate...Date())
                         .font(.system(.body, design: .rounded))
+                        .onChange(of: endDate) { newEnd in
+                            if newEnd <= startDate {
+                                startDate = newEnd.addingTimeInterval(-600)
+                            }
+                        }
                 }
                 
                 Section(
@@ -83,11 +105,13 @@ public struct AddStepModalView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("確認寫入") {
-                        if let count = Int(stepText), count > 0 {
+                        let count = min(parsedStepCount, 200000)
+                        if count > 0 {
                             viewModel.addStepsWithDetails(count: count, startDate: startDate, endDate: endDate, isDistributed: isDistributed)
                             dismiss()
                         }
                     }
+                    .disabled(parsedStepCount <= 0)
                     .font(.system(.body, design: .rounded))
                     .fontWeight(.bold)
                 }
@@ -96,7 +120,7 @@ public struct AddStepModalView: View {
     }
     
     private func addStepCount(_ delta: Int) {
-        let current = Int(stepText) ?? 0
+        let current = parsedStepCount
         stepText = "\(current + delta)"
     }
 }
