@@ -77,8 +77,8 @@ IOS-step-app/
 在 Mac 終端機 (Terminal) 中執行以下指令：
 
 ```bash
-git clone https://github.com/Richard-yq/Today-steps.git
-cd Today-steps
+git clone https://github.com/Richard-yq/PotatoStep.git
+cd PotatoStep
 open PotatoStep.xcodeproj
 ```
 
@@ -113,7 +113,7 @@ open PotatoStep.xcodeproj
 1. **直接用 Mac 幫朋友安裝**：
    將朋友的 iPhone 接上 Mac，在 Xcode 上方選取朋友的手機按 `Cmd + R` 免費安裝。
 2. **分享 GitHub 原始碼**：
-   將本倉庫連結 `https://github.com/Richard-yq/Today-steps.git` 分享給擁有 Mac/Xcode 的朋友。
+   將本倉庫連結 `https://github.com/Richard-yq/PotatoStep.git` 分享給擁有 Mac/Xcode 的朋友。
 3. **Apple TestFlight 邀請**：
    加入 Apple Developer Program 付費開發者帳號後，上傳至 App Store Connect 即可產生 TestFlight 公開邀請連結。
 
