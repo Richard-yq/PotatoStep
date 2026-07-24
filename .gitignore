@@ -1,0 +1,10 @@
+# Swift Build Artifacts
+.build/
+*.xcodeproj
+*.xcworkspace
+
+# macOS System Files
+.DS_Store
+
+# User Data
+*.xcuserdata

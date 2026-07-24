@@ -1,4 +1,0 @@
-module IOS_step_app {
-    header "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/IOS-step-app-Swift.h"
-    requires objc
-}

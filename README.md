@@ -38,9 +38,8 @@ IOS-step-app/
 │   └── StepViewModel.swift  # MVVM 狀態管理、步數轉換與 UserDefaults 持久化
 └── Views/
     ├── ContentView.swift    # 底部分頁 Tab 導覽列與全局 Alert
-    ├── DashboardView.swift  # 環形進度儀表板、數據卡片與一鍵同步膠囊按鈕
+    ├── DashboardView.swift  # 極致現代環形儀表板、數據卡片與一鍵同步膠囊按鈕
     ├── AddStepModalView.swift # 自訂步數、時間範圍與寫入模式選單
-    ├── HabitListView.swift  # 每日習慣打卡與連勝卡片
     └── HistoryView.swift   # 歷史同步紀錄列表
 ```
 
