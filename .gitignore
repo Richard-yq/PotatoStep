@@ -1,10 +1,12 @@
 # Swift Build Artifacts
 .build/
-*.xcodeproj
-*.xcworkspace
+
+# Xcode User Data & Derived Data
+*.xcuserdata
+*.xcworkspace/xcuserdata
+xcuserdata/
+DerivedData/
 
 # macOS System Files
 .DS_Store
 
-# User Data
-*.xcuserdata
