@@ -37,7 +37,11 @@ public struct HistoryView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List {
-                    Section(header: Text("近期同步紀錄").font(.system(.subheadline, design: .rounded)).fontWeight(.bold)) {
+                    Section(
+                        header: Text("近期同步紀錄").font(.system(.subheadline, design: .rounded)).fontWeight(.bold),
+                        footer: Text("左滑即可個別刪除單筆誤加的步數紀錄與 Apple Health 數據。")
+                            .font(.system(.caption, design: .rounded))
+                    ) {
                         ForEach(viewModel.historyLogs) { record in
                             HStack(spacing: 14) {
                                 ZStack {
@@ -70,6 +74,7 @@ public struct HistoryView: View {
                             }
                             .padding(.vertical, 4)
                         }
+                        .onDelete(perform: viewModel.deleteHistoryRecord)
                     }
                 }
                 #if os(iOS)

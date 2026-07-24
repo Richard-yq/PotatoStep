@@ -124,4 +124,24 @@ public class HealthKitManager: ObservableObject {
             completion(success, error)
         }
     }
+    
+    /// 刪除指定時間區間內的 HealthKit 步數樣本
+    public func deleteSteps(startDate: Date, endDate: Date, completion: @escaping (Bool, Error?) -> Void) {
+        guard let stepType = HKQuantityType.quantityType(forIdentifier: .stepCount) else {
+            completion(false, nil)
+            return
+        }
+        
+        let predicate = HKQuery.predicateForSamples(withStart: startDate.addingTimeInterval(-2), end: endDate.addingTimeInterval(2), options: .strictStartDate)
+        healthStore.deleteObjects(of: stepType, predicate: predicate) { success, count, error in
+            completion(success, error)
+        }
+    }
+    
+    /// 刪除今日所有 HealthKit 步數樣本 (重置今日步數)
+    public func deleteTodaySteps(completion: @escaping (Bool, Error?) -> Void) {
+        let now = Date()
+        let startOfDay = Calendar.current.startOfDay(for: now)
+        deleteSteps(startDate: startOfDay, endDate: now, completion: completion)
+    }
 }

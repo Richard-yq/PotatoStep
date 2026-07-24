@@ -3,6 +3,7 @@ import SwiftUI
 public struct DashboardView: View {
     @ObservedObject var viewModel: StepViewModel
     @Binding var showAddModal: Bool
+    @State private var showResetConfirm: Bool = false
     
     public init(viewModel: StepViewModel, showAddModal: Binding<Bool>) {
         self.viewModel = viewModel
@@ -95,7 +96,7 @@ public struct DashboardView: View {
                         .shadow(color: Color(red: 0.1, green: 0.4, blue: 0.9).opacity(0.25), radius: 20, x: 0, y: 10)
                     
                     VStack(spacing: 24) {
-                        // 標題與重新整理
+                        // 標題與重新整理/重置
                         HStack(alignment: .center) {
                             logoImage
                                 .frame(width: 46, height: 46)
@@ -123,18 +124,35 @@ public struct DashboardView: View {
                             }
                             Spacer()
                             
-                            Button(action: {
-                                viewModel.refreshTodaySteps()
-                            }) {
-                                ZStack {
-                                    Circle()
-                                        .fill(Color.white.opacity(0.12))
-                                        .frame(width: 44, height: 44)
-                                    Image(systemName: "arrow.triangle.2.circlepath")
-                                        .font(.system(size: 18, weight: .bold))
-                                        .foregroundColor(.white)
-                                        .rotationEffect(.degrees(viewModel.isSyncing ? 360 : 0))
-                                        .animation(viewModel.isSyncing ? Animation.linear(duration: 1).repeatForever(autoreverses: false) : .default, value: viewModel.isSyncing)
+                            HStack(spacing: 10) {
+                                // 重置按鈕
+                                Button(action: {
+                                    showResetConfirm = true
+                                }) {
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color.red.opacity(0.2))
+                                            .frame(width: 40, height: 40)
+                                        Image(systemName: "trash.fill")
+                                            .font(.system(size: 16, weight: .bold))
+                                            .foregroundColor(.red)
+                                    }
+                                }
+                                
+                                // 重新整理按鈕
+                                Button(action: {
+                                    viewModel.refreshTodaySteps()
+                                }) {
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color.white.opacity(0.12))
+                                            .frame(width: 40, height: 40)
+                                        Image(systemName: "arrow.triangle.2.circlepath")
+                                            .font(.system(size: 16, weight: .bold))
+                                            .foregroundColor(.white)
+                                            .rotationEffect(.degrees(viewModel.isSyncing ? 360 : 0))
+                                            .animation(viewModel.isSyncing ? Animation.linear(duration: 1).repeatForever(autoreverses: false) : .default, value: viewModel.isSyncing)
+                                    }
                                 }
                             }
                         }
@@ -279,6 +297,14 @@ public struct DashboardView: View {
                 .padding(.horizontal)
             }
             .padding(.vertical)
+        }
+        .confirmationDialog("重置今日步數", isPresented: $showResetConfirm, titleVisibility: .visible) {
+            Button("確定清除今日新增步數", role: .destructive) {
+                viewModel.resetTodaySteps()
+            }
+            Button("取消", role: .cancel) {}
+        } message: {
+            Text("此操作將會從 Apple Health 與紀錄中刪除今日由 PotatoStep 新增的步數。")
         }
         #if canImport(UIKit)
         .background(Color(.systemGroupedBackground))

@@ -105,6 +105,45 @@ public class StepViewModel: ObservableObject {
         }
     }
     
+    /// 清除與重置今日寫入的所有步數
+    public func resetTodaySteps() {
+        isSyncing = true
+        healthKitManager.deleteTodaySteps { [weak self] success, error in
+            DispatchQueue.main.async {
+                self?.isSyncing = false
+                if success {
+                    let startOfDay = Calendar.current.startOfDay(for: Date())
+                    self?.historyLogs.removeAll { $0.startDate >= startOfDay }
+                    self?.saveHistoryToStorage()
+                    self?.refreshTodaySteps()
+                    
+                    self?.alertMessage = "已成功清空與重置今日新增的步數！"
+                    self?.showAlert = true
+                } else {
+                    self?.alertMessage = "重置失敗：\(error?.localizedDescription ?? "未知錯誤")"
+                    self?.showAlert = true
+                }
+            }
+        }
+    }
+    
+    /// 刪除單筆步數紀錄 (支援列表滑動刪除)
+    public func deleteHistoryRecord(at offsets: IndexSet) {
+        for index in offsets {
+            guard index < historyLogs.count else { continue }
+            let record = historyLogs[index]
+            healthKitManager.deleteSteps(startDate: record.startDate, endDate: record.endDate) { [weak self] success, _ in
+                DispatchQueue.main.async {
+                    if success {
+                        self?.refreshTodaySteps()
+                    }
+                }
+            }
+        }
+        historyLogs.remove(atOffsets: offsets)
+        saveHistoryToStorage()
+    }
+    
     private func saveHistoryToStorage() {
         if let encoded = try? JSONEncoder().encode(historyLogs) {
             UserDefaults.standard.set(encoded, forKey: historyStorageKey)
