@@ -1,0 +1,47 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "IOS-step-app-arm64-apple-macosx15.0-debug.module": ["<IOS-step-app-arm64-apple-macosx15.0-debug.module>"]
+  "PackageStructure": ["<PackageStructure>"]
+  "main": ["<IOS-step-app-arm64-apple-macosx15.0-debug.module>"]
+  "test": ["<IOS-step-app-arm64-apple-macosx15.0-debug.module>"]
+default: "main"
+nodes:
+  "/Users/yq/Documents/side-project/IOS-step-app/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+commands:
+  "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/yq/Documents/side-project/IOS-step-app/Models/StepRecord.swift","/Users/yq/Documents/side-project/IOS-step-app/Services/HealthKitManager.swift","/Users/yq/Documents/side-project/IOS-step-app/StepTrackerApp.swift","/Users/yq/Documents/side-project/IOS-step-app/ViewModels/StepViewModel.swift","/Users/yq/Documents/side-project/IOS-step-app/Views/AddStepModalView.swift","/Users/yq/Documents/side-project/IOS-step-app/Views/ContentView.swift","/Users/yq/Documents/side-project/IOS-step-app/Views/DashboardView.swift","/Users/yq/Documents/side-project/IOS-step-app/Views/HistoryView.swift"]
+    outputs: ["/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/sources"]
+    description: "Write auxiliary file /Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/sources"
+
+  "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"]
+    outputs: ["/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+
+  "<IOS-step-app-arm64-apple-macosx15.0-debug.module>":
+    tool: phony
+    inputs: ["/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepRecord.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/HealthKitManager.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepTrackerApp.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepViewModel.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/AddStepModalView.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/ContentView.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/DashboardView.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/HistoryView.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/Modules/IOS_step_app.swiftmodule"]
+    outputs: ["<IOS-step-app-arm64-apple-macosx15.0-debug.module>"]
+
+  "C.IOS-step-app-arm64-apple-macosx15.0-debug.module":
+    tool: shell
+    inputs: ["/Users/yq/Documents/side-project/IOS-step-app/Models/StepRecord.swift","/Users/yq/Documents/side-project/IOS-step-app/Services/HealthKitManager.swift","/Users/yq/Documents/side-project/IOS-step-app/StepTrackerApp.swift","/Users/yq/Documents/side-project/IOS-step-app/ViewModels/StepViewModel.swift","/Users/yq/Documents/side-project/IOS-step-app/Views/AddStepModalView.swift","/Users/yq/Documents/side-project/IOS-step-app/Views/ContentView.swift","/Users/yq/Documents/side-project/IOS-step-app/Views/DashboardView.swift","/Users/yq/Documents/side-project/IOS-step-app/Views/HistoryView.swift","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/sources"]
+    outputs: ["/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepRecord.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/HealthKitManager.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepTrackerApp.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepViewModel.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/AddStepModalView.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/ContentView.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/DashboardView.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/HistoryView.swift.o","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/Modules/IOS_step_app.swiftmodule"]
+    description: "Compiling Swift Module 'IOS_step_app' (8 sources)"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","IOS_step_app","-emit-dependencies","-emit-module","-emit-module-path","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/Modules/IOS_step_app.swiftmodule","-output-file-map","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/output-file-map.json","-parse-as-library","-incremental","-c","@/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/sources","-I","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx13.0","-enable-batch-mode","-index-store-path","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-j10","-DSWIFT_PACKAGE","-DDEBUG","-module-cache-path","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-parse-as-library","-emit-objc-header","-emit-objc-header-path","/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/IOS-step-app-Swift.h","-swift-version","5","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g","-Xcc","-isysroot","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-Xcc","-fPIC","-Xcc","-g","-package-name","ios_step_app"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/yq/Documents/side-project/IOS-step-app/","/Users/yq/Documents/side-project/IOS-step-app/Package.swift","/Users/yq/Documents/side-project/IOS-step-app/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

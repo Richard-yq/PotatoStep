@@ -1,0 +1,53 @@
+{
+  "": {
+    "swift-dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/master.swiftdeps"
+  },
+  "/Users/yq/Documents/side-project/IOS-step-app/Models/StepRecord.swift": {
+    "dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepRecord.d",
+    "object": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepRecord.swift.o",
+    "swiftmodule": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepRecord~partial.swiftmodule",
+    "swift-dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepRecord.swiftdeps"
+  },
+  "/Users/yq/Documents/side-project/IOS-step-app/Services/HealthKitManager.swift": {
+    "dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/HealthKitManager.d",
+    "object": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/HealthKitManager.swift.o",
+    "swiftmodule": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/HealthKitManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/HealthKitManager.swiftdeps"
+  },
+  "/Users/yq/Documents/side-project/IOS-step-app/StepTrackerApp.swift": {
+    "dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepTrackerApp.d",
+    "object": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepTrackerApp.swift.o",
+    "swiftmodule": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepTrackerApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepTrackerApp.swiftdeps"
+  },
+  "/Users/yq/Documents/side-project/IOS-step-app/ViewModels/StepViewModel.swift": {
+    "dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepViewModel.d",
+    "object": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepViewModel.swift.o",
+    "swiftmodule": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepViewModel~partial.swiftmodule",
+    "swift-dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/StepViewModel.swiftdeps"
+  },
+  "/Users/yq/Documents/side-project/IOS-step-app/Views/AddStepModalView.swift": {
+    "dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/AddStepModalView.d",
+    "object": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/AddStepModalView.swift.o",
+    "swiftmodule": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/AddStepModalView~partial.swiftmodule",
+    "swift-dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/AddStepModalView.swiftdeps"
+  },
+  "/Users/yq/Documents/side-project/IOS-step-app/Views/ContentView.swift": {
+    "dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/ContentView.d",
+    "object": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/ContentView.swift.o",
+    "swiftmodule": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/ContentView~partial.swiftmodule",
+    "swift-dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/ContentView.swiftdeps"
+  },
+  "/Users/yq/Documents/side-project/IOS-step-app/Views/DashboardView.swift": {
+    "dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/DashboardView.d",
+    "object": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/DashboardView.swift.o",
+    "swiftmodule": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/DashboardView~partial.swiftmodule",
+    "swift-dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/DashboardView.swiftdeps"
+  },
+  "/Users/yq/Documents/side-project/IOS-step-app/Views/HistoryView.swift": {
+    "dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/HistoryView.d",
+    "object": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/HistoryView.swift.o",
+    "swiftmodule": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/HistoryView~partial.swiftmodule",
+    "swift-dependencies": "/Users/yq/Documents/side-project/IOS-step-app/.build/arm64-apple-macosx/debug/IOS_step_app.build/HistoryView.swiftdeps"
+  }
+}
