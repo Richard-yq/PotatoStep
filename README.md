@@ -1,6 +1,6 @@
-# 步數增加與健康打卡 iOS App (StepSync & Habit Tracker)
+# PotatoStep (步數同步與健康管理 iOS App)
 
-一款支援將自訂步數同步至 iOS 系統原生 **Apple Health (健康)** 的原生 SwiftUI 應用程式，結合步數補登、平滑演算法分攤與每日習慣打卡功能。
+一款支援將自訂步數同步至 iOS 系統原生 **Apple Health (健康)** 的原生 SwiftUI 應用程式，結合極速補登與平滑演算法分攤寫入。
 
 ---
 

@@ -39,9 +39,9 @@ public struct ContentView: View {
     
     private func navigationTitleForTab(_ tab: Int) -> String {
         switch tab {
-        case 0: return "步數與健康管理"
+        case 0: return "PotatoStep"
         case 1: return "同步紀錄"
-        default: return "Step Tracker"
+        default: return "PotatoStep"
         }
     }
 }

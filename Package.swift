@@ -2,19 +2,19 @@
 import PackageDescription
 
 let package = Package(
-    name: "IOS-step-app",
+    name: "PotatoStep",
     platforms: [
         .iOS(.v16),
         .macOS(.v13)
     ],
     products: [
         .library(
-            name: "IOS-step-app",
-            targets: ["IOS-step-app"]),
+            name: "PotatoStep",
+            targets: ["PotatoStep"]),
     ],
     targets: [
         .target(
-            name: "IOS-step-app",
+            name: "PotatoStep",
             path: ".",
             exclude: ["Info.plist", "README.md"],
             sources: [
